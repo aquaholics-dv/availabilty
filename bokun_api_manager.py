@@ -225,9 +225,20 @@ def add_availability_rule():
             # Fix maxCapacityForPickup - must be >= 1
             if not rule.get('maxCapacityForPickup') or rule['maxCapacityForPickup'] < 1:
                 rule['maxCapacityForPickup'] = rule.get('maxCapacity', 12)
-            # Clean startTimes - remove externalId to avoid id/externalId conflict
-            if rule.get('startTimes'):
-                rule['startTimes'] = [{'id': st['id']} for st in rule['startTimes'] if st.get('id')]
+            
+            # For DATE_AND_TIME experiences, ensure allStartTimes is set
+            if booking_type == 'DATE_AND_TIME':
+                if 'allStartTimes' not in rule:
+                    # If startTimes exist, set allStartTimes=False, otherwise True
+                    if rule.get('startTimes'):
+                        rule['allStartTimes'] = False
+                    else:
+                        rule['allStartTimes'] = True
+                
+                # Clean startTimes - remove externalId to avoid id/externalId conflict
+                if rule.get('startTimes'):
+                    rule['startTimes'] = [{'id': st['id']} for st in rule['startTimes'] if st.get('id')]
+            
             clean_existing.append(rule)
 
         updated_rules = clean_existing + [new_rule]
