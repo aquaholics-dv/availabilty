@@ -698,6 +698,10 @@ HTML_TEMPLATE = '''
             return timeText ? timeText.textContent.trim() : '';
         });
 
+        console.log('Checked boxes:', checkedBoxes.length);
+        console.log('Selected IDs:', selectedTimeIds);
+        console.log('Selected labels:', selectedLabels);
+
         if (bookingType === 'DATE_AND_TIME' && selectedTimeIds.length === 0) {
             return showStatus('Please select at least one start time', 'error');
         }
