@@ -262,55 +262,120 @@ HTML_TEMPLATE = '''
     <title>Aquaholics Boat Booking App</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 16px 12px;
+            margin: 0;
         }
-        .container { max-width: 850px; margin: 0 auto; }
+        .container { max-width: 600px; margin: 0 auto; }
         .card {
             background: white;
             border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-bottom: 14px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-        h1 { color: white; font-size: 30px; margin-bottom: 6px; }
-        .tagline { color: rgba(255,255,255,0.8); margin-bottom: 25px; font-size: 15px; }
-        h2 { font-size: 18px; color: #1d57c7; margin-bottom: 18px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 11px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
-        input:focus, select:focus { outline: none; border-color: #1d57c7; }
-        .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .day-btn {
-            padding: 8px 4px; border: 2px solid #e2e8f0; border-radius: 8px;
-            background: white; font-size: 12px; font-weight: 600; cursor: pointer;
-            text-align: center; transition: all 0.2s; color: #555;
+        h1 { color: white; font-size: 24px; margin: 0 0 4px 0; line-height: 1.3; }
+        h2 { font-size: 16px; color: #1d57c7; margin: 0 0 14px 0; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
+        input, select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px; /* 16px prevents iOS zoom */
+            -webkit-appearance: none;
+            appearance: none;
+            background: white;
         }
-        .day-btn.active { background: #1d57c7; color: white; border-color: #1d57c7; }
+        input:focus, select:focus { outline: none; border-color: #1d57c7; }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231d57c7' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
         .btn {
-            width: 100%; padding: 14px; border: none; border-radius: 10px;
-            font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 8px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 6px;
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-primary { background: #1d57c7; color: white; }
-        .btn-primary:hover { background: #164aab; transform: translateY(-1px); }
-        .btn-secondary { background: #f1f5f9; color: #444; margin-top: 10px; }
-        .status { padding: 14px 18px; border-radius: 10px; margin-top: 16px; font-size: 14px; display: none; }
+        .btn-primary:active { background: #164aab; transform: scale(0.98); }
+        .status {
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-top: 14px;
+            font-size: 14px;
+            display: none;
+            line-height: 1.5;
+        }
         .status.show { display: block; }
         .status.success { background: #d1fae5; border-left: 4px solid #10b981; color: #065f46; }
         .status.error   { background: #fee2e2; border-left: 4px solid #ef4444; color: #7f1d1d; }
         .status.info    { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a8a; }
-        .rules-list { margin-top: 16px; }
+        .rules-list { margin-top: 8px; }
         .rule-item {
-            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 12px 16px; margin-bottom: 10px; font-size: 13px; color: #444;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #444;
+            line-height: 1.6;
         }
         .rule-item strong { color: #1d57c7; }
         .section-label { font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+        .toggle-bar {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border: 1px solid #c7d7f9;
+            margin-top: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .toggle-bar span:first-child { font-weight: 600; color: #1d57c7; font-size: 14px; }
+        .toggle-icon { color: #1d57c7; font-size: 14px; transition: transform 0.2s; }
+        /* Bigger touch targets for checkboxes */
+        #startTimesList label {
+            padding: 12px 14px;
+            margin: 6px 0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #startTimesList input[type=checkbox] {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            cursor: pointer;
+            accent-color: #1d57c7;
+        }
+        /* Log card */
+        #addedLog .rule-item { font-size: 14px; padding: 12px 14px; }
     </style>
 </head>
 <body>
@@ -327,11 +392,9 @@ HTML_TEMPLATE = '''
             </select>
         </div>
         <div id="rulesSection" style="display:none">
-            <div onclick="toggleRules()" style="cursor:pointer;display:flex;align-items:center;
-                justify-content:space-between;padding:10px 14px;background:#f0f4ff;
-                border-radius:8px;border:1px solid #c7d7f9;margin-top:8px">
-                <span style="font-weight:600;color:#1d57c7;font-size:14px">📋 Current Availability</span>
-                <span id="rulesToggleIcon" style="color:#1d57c7;font-size:18px;transition:transform 0.2s">▼</span>
+            <div class="toggle-bar" onclick="toggleRules()">
+                <span>📋 Current Availability</span>
+                <span id="rulesToggleIcon" class="toggle-icon">▼</span>
             </div>
             <div id="rulesList" class="rules-list" style="display:none;margin-top:4px"></div>
         </div>
@@ -535,4 +598,3 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
-
