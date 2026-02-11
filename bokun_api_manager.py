@@ -461,8 +461,11 @@ HTML_TEMPLATE = '''
         .status.show { display: block; }
         .status.success {
             background: #d1fae5;
-            border-left: 4px solid #10b981;
+            border-left: 6px solid #10b981;
             color: #065f46;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: pre-line;
         }
         .status.error {
             background: #fee2e2;
@@ -689,7 +692,11 @@ HTML_TEMPLATE = '''
         // Collect checked start times for DATE_AND_TIME experiences
         const checkedBoxes    = [...document.querySelectorAll('#startTimesList input[type=checkbox]:checked')];
         const selectedTimeIds = checkedBoxes.map(cb => parseInt(cb.value));
-        const selectedLabels  = checkedBoxes.map(cb => cb.nextElementSibling.textContent.trim());
+        const selectedLabels  = checkedBoxes.map(cb => {
+            const label = cb.nextElementSibling;
+            const timeText = label.querySelector('.time-text');
+            return timeText ? timeText.textContent.trim() : '';
+        });
 
         if (bookingType === 'DATE_AND_TIME' && selectedTimeIds.length === 0) {
             return showStatus('Please select at least one start time', 'error');
@@ -713,7 +720,11 @@ HTML_TEMPLATE = '''
 
         if (data.success) {
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
-            showStatus(`✅ ${date}${timeLabel} added!`, 'success');
+            showStatus(`🎉 Availability Added!\n${date}${timeLabel} • ${capacity} spaces`, 'success');
+            
+            // Auto-hide success message after 4 seconds
+            setTimeout(() => hideStatus(), 4000);
+            
             addedDates.push({ date, timeLabel, capacity });
             document.getElementById('logCard').style.display = 'block';
             document.getElementById('addedLog').innerHTML = addedDates.map(d =>
