@@ -327,8 +327,13 @@ HTML_TEMPLATE = '''
             </select>
         </div>
         <div id="rulesSection" style="display:none">
-            <div class="section-label">📋 Current Availability Rules:</div>
-            <div id="rulesList" class="rules-list"></div>
+            <div onclick="toggleRules()" style="cursor:pointer;display:flex;align-items:center;
+                justify-content:space-between;padding:10px 14px;background:#f0f4ff;
+                border-radius:8px;border:1px solid #c7d7f9;margin-top:8px">
+                <span style="font-weight:600;color:#1d57c7;font-size:14px">📋 Current Availability</span>
+                <span id="rulesToggleIcon" style="color:#1d57c7;font-size:18px;transition:transform 0.2s">▼</span>
+            </div>
+            <div id="rulesList" class="rules-list" style="display:none;margin-top:4px"></div>
         </div>
     </div>
 
@@ -505,6 +510,14 @@ HTML_TEMPLATE = '''
         document.getElementById('status').className = 'status';
     }
 
+    function toggleRules() {
+        const list = document.getElementById('rulesList');
+        const icon = document.getElementById('rulesToggleIcon');
+        const isHidden = list.style.display === 'none';
+        list.style.display = isHidden ? 'block' : 'none';
+        icon.textContent = isHidden ? '▲' : '▼';
+    }
+
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
     loadExperiences();
 </script>
@@ -522,3 +535,4 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
