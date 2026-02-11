@@ -698,9 +698,11 @@ HTML_TEMPLATE = '''
             return timeText ? timeText.textContent.trim() : '';
         });
 
-        console.log('Checked boxes:', checkedBoxes.length);
-        console.log('Selected IDs:', selectedTimeIds);
-        console.log('Selected labels:', selectedLabels);
+        // DEBUG: Show what's selected on screen
+        if (bookingType === 'DATE_AND_TIME') {
+            showStatus(`DEBUG: ${checkedBoxes.length} time(s) checked: ${selectedLabels.join(', ')}`, 'info');
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds so you can see it
+        }
 
         if (bookingType === 'DATE_AND_TIME' && selectedTimeIds.length === 0) {
             return showStatus('Please select at least one start time', 'error');
