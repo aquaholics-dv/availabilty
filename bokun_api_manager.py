@@ -207,18 +207,17 @@ def add_availability_rule():
             'guidedLanguages':      [],
         }
 
-        # Only send start time fields for DATE_AND_TIME products
+        # Handle start times for DATE_AND_TIME products
         if booking_type == 'DATE_AND_TIME':
             if start_time_ids and len(start_time_ids) > 0:
+                # User selected specific times
                 new_rule['allStartTimes'] = False
                 new_rule['startTimes'] = [{'id': sid} for sid in start_time_ids]
                 print(f'Adding specific times: {start_time_ids}')
             else:
+                # No times selected, add all
                 new_rule['allStartTimes'] = True
                 print('Adding all start times')
-        else:
-            # DATE_ONLY experiences don't need start time fields at all
-            pass
 
         # Step 3: Clean existing rules before sending back
         clean_existing = []
