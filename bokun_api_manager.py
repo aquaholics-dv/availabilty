@@ -267,37 +267,22 @@ HTML_TEMPLATE = '''
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f5f7fa;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        
-        /* Header */
-        .header {
             background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
-            color: white;
-            padding: 24px 20px;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header h1 {
+            min-height: 100vh;
+            padding: 16px 12px;
             margin: 0;
-            font-size: 26px;
-            font-weight: 700;
         }
         
-        .container { padding: 0; margin: 0; }
+        /* Header removed - back to inline style */
         
-        /* Section cards */
+        .container { max-width: 100%; margin: 0 auto; padding: 0; }
+        
         .card {
             background: white;
-            padding: 24px 20px;
-            border-bottom: 12px solid #f5f7fa;
-            min-height: 200px;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
         
         /* Step header */
@@ -631,7 +616,7 @@ HTML_TEMPLATE = '''
         if (!id) return;
 
         addedDates = [];
-        document.getElementById('logCard').classList.remove('show');
+        document.getElementById('logCard').style.display = 'none';
         document.getElementById('addedLog').innerHTML = '';
 
         showStatus('Loading current availability...', 'info');
@@ -651,10 +636,9 @@ HTML_TEMPLATE = '''
             const noTimesMsg   = document.getElementById('noTimesMsg');
 
             if (bookingType === 'DATE_AND_TIME') {
-                timeGroup.classList.add('show');
+                timeGroup.style.display = 'block';
                 if (data.startTimes && data.startTimes.length > 0) {
                     noTimesMsg.style.display = 'none';
-                    timesList.style.display = 'flex';
                     timesList.innerHTML = data.startTimes.map(st =>
                         `<div class="time-option">
                             <input type="checkbox" id="time-${st.id}" value="${st.id}">
@@ -669,7 +653,7 @@ HTML_TEMPLATE = '''
                     noTimesMsg.style.display = 'block';
                 }
             } else {
-                timeGroup.classList.remove('show');
+                timeGroup.style.display = 'none';
                 timesList.innerHTML = '';
             }
 
@@ -731,7 +715,7 @@ HTML_TEMPLATE = '''
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
             showStatus(`✅ ${date}${timeLabel} added!`, 'success');
             addedDates.push({ date, timeLabel, capacity });
-            document.getElementById('logCard').classList.add('show');
+            document.getElementById('logCard').style.display = 'block';
             document.getElementById('addedLog').innerHTML = addedDates.map(d =>
                 `<div class="rule-item">📅 <strong>${d.date}</strong>${d.timeLabel} &nbsp;|&nbsp; Capacity: <strong>${d.capacity}</strong></div>`
             ).join('');
@@ -779,4 +763,3 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
-
