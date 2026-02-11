@@ -204,18 +204,21 @@ def add_availability_rule():
             'maxCapacity':          capacity,
             'maxCapacityForPickup': capacity,
             'minTotalPax':          1,
-            'allStartTimes':        True,
-            # startTimes must NOT be sent when allStartTimes is True
             'guidedLanguages':      [],
         }
 
         # Only send start time fields for DATE_AND_TIME products
         if booking_type == 'DATE_AND_TIME':
-            if all_start_times:
-                new_rule['allStartTimes'] = True
-            else:
+            if start_time_ids and len(start_time_ids) > 0:
                 new_rule['allStartTimes'] = False
                 new_rule['startTimes'] = [{'id': sid} for sid in start_time_ids]
+                print(f'Adding specific times: {start_time_ids}')
+            else:
+                new_rule['allStartTimes'] = True
+                print('Adding all start times')
+        else:
+            # DATE_ONLY experiences don't need start time fields at all
+            pass
 
         # Step 3: Clean existing rules before sending back
         clean_existing = []
