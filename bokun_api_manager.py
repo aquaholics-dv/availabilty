@@ -261,190 +261,298 @@ HTML_TEMPLATE = '''
 <head>
     <title>Aquaholics Boat Booking App</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        * { box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
-            min-height: 100vh;
-            padding: 12px;
-            margin: 0;
-        }
-        .container { max-width: 100%; margin: 0 auto; }
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: white;
-            font-size: 20px;
-            margin: 0 0 20px 0;
-            line-height: 1.3;
-            text-align: center;
-        }
-        h2 { font-size: 15px; color: #1d57c7; margin: 0 0 12px 0; font-weight: 700; }
-        .form-group { margin-bottom: 14px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
-        input, select {
-            width: 100%;
-            padding: 13px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px; /* 16px prevents iOS zoom */
-            -webkit-appearance: none;
-            appearance: none;
-            background: white;
-        }
-        input:focus, select:focus { outline: none; border-color: #1d57c7; }
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231d57c7' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 40px;
-        }
-        input[type="number"] { -moz-appearance: textfield; }
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 17px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.15s;
-            margin-top: 6px;
+        * { 
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        .btn-primary { background: #1d57c7; color: white; }
-        .btn-primary:active { background: #164aab; transform: scale(0.98); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        
+        .container { padding: 0; margin: 0; }
+        
+        /* Section cards */
+        .card {
+            background: white;
+            padding: 24px 20px;
+            border-bottom: 12px solid #f5f7fa;
+            min-height: 200px;
+        }
+        
+        /* Step header */
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #1d57c7;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        h2 {
+            font-size: 20px;
+            color: #2E3645;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        /* Form elements */
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        
+        select, input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 17px;
+            background: white;
+            color: #2E3645;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath fill='%231d57c7' d='M7 10L0 0h14z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 50px;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #1d57c7;
+            box-shadow: 0 0 0 3px rgba(29,87,199,0.1);
+        }
+        
+        /* Time checkboxes - CUSTOM DESIGN */
+        #timeGroup { display: none; }
+        #timeGroup.show { display: block; }
+        
+        #startTimesList {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .time-option {
+            position: relative;
+            display: block;
+        }
+        
+        .time-option input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .time-label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px;
+            background: #f8f9fa;
+            border: 3px solid #e2e8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        
+        .time-option input[type="checkbox"]:checked + .time-label {
+            background: #e8f0fe;
+            border-color: #1d57c7;
+        }
+        
+        .time-option input[type="checkbox"]:checked + .time-label .custom-checkbox {
+            background: #1d57c7;
+            border-color: #1d57c7;
+        }
+        
+        .time-option input[type="checkbox"]:checked + .time-label .custom-checkbox::after {
+            display: block;
+        }
+        
+        .custom-checkbox {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border: 3px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            position: relative;
+            transition: all 0.2s;
+        }
+        
+        .custom-checkbox::after {
+            content: '';
+            position: absolute;
+            display: none;
+            left: 8px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+        
+        .time-text {
+            font-size: 19px;
+            font-weight: 700;
+            color: #1d57c7;
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: #1d57c7;
+            color: white;
+        }
+        
+        .btn-primary:active {
+            background: #164aab;
+            transform: scale(0.98);
+        }
+        
+        /* Status messages */
         .status {
-            padding: 14px 16px;
-            border-radius: 10px;
-            margin-top: 14px;
-            font-size: 14px;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 15px;
             display: none;
             line-height: 1.5;
         }
         .status.show { display: block; }
-        .status.success { background: #d1fae5; border-left: 4px solid #10b981; color: #065f46; }
-        .status.error   { background: #fee2e2; border-left: 4px solid #ef4444; color: #7f1d1d; }
-        .status.info    { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a8a; }
-        .rules-list { margin-top: 8px; }
-        .rule-item {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #444;
-            line-height: 1.6;
+        .status.success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            color: #065f46;
         }
-        .rule-item strong { color: #1d57c7; }
-        .section-label { font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px; }
+        .status.error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            color: #7f1d1d;
+        }
+        .status.info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            color: #1e3a8a;
+        }
+        
+        /* Collapsible availability */
+        #rulesSection { display: none; }
         .toggle-bar {
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 14px;
+            padding: 16px;
             background: #f0f4ff;
-            border-radius: 10px;
-            border: 1px solid #c7d7f9;
-            margin-top: 10px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .toggle-bar span:first-child { font-weight: 600; color: #1d57c7; font-size: 14px; }
-        .toggle-icon { color: #1d57c7; font-size: 14px; transition: transform 0.2s; }
-        /* Touch targets for checkboxes */
-        #startTimesList label {
-            padding: 14px;
-            margin: 8px 0;
             border-radius: 12px;
-            background: #f8f9fa;
-            border: 2px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
+            border: 2px solid #c7d7f9;
+            margin-top: 12px;
+            user-select: none;
+        }
+        .toggle-bar span:first-child {
+            font-weight: 600;
+            color: #1d57c7;
+            font-size: 15px;
+        }
+        .toggle-icon {
+            color: #1d57c7;
             font-size: 16px;
-            -webkit-tap-highlight-color: transparent;
-            transition: all 0.15s;
+            transition: transform 0.2s;
         }
-        #startTimesList label:active { background: #e8f0fe; border-color: #1d57c7; }
-        #startTimesList input[type=checkbox] {
-            width: 24px;
-            height: 24px;
-            min-width: 24px;
-            cursor: pointer;
-            accent-color: #1d57c7;
-            -webkit-appearance: checkbox;
-            appearance: checkbox;
-            position: relative;
-            margin: 0;
+        #rulesList {
+            display: none;
+            margin-top: 12px;
         }
-        #startTimesList span { font-weight: 700; color: #1d57c7; font-size: 18px; }
-        #addedLog .rule-item { font-size: 14px; padding: 12px 14px; }
+        .rule-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+        .rule-item strong { color: #1d57c7; }
         
-        /* All mobile devices */
-        @media (max-width: 428px) {
-            body { padding: 8px; }
-            .card { padding: 16px; border-radius: 12px; margin-bottom: 10px; }
-            h1 { font-size: 22px; margin-bottom: 16px; }
-            h2 { font-size: 15px; margin-bottom: 10px; }
-            input, select { padding: 14px; font-size: 16px; border-radius: 12px; }
-            .btn { padding: 16px; font-size: 17px; border-radius: 12px; }
-            #startTimesList label { padding: 16px; margin: 6px 0; }
-            #startTimesList span { font-size: 17px; }
-            .toggle-bar { padding: 14px; }
-            .rule-item { padding: 12px; font-size: 14px; }
+        /* Log card */
+        #logCard { display: none; }
+        #logCard.show { display: block; }
+        #addedLog .rule-item {
+            font-size: 15px;
+            padding: 14px;
         }
         
-        /* Extra small phones */
-        @media (max-width: 374px) {
-            body { padding: 6px; }
-            .card { padding: 14px; }
-            h1 { font-size: 20px; }
+        /* Warning message */
+        .no-times-msg {
+            display: none;
+            color: #e67e22;
+            font-size: 14px;
+            padding: 12px;
+            background: #fef9e7;
+            border-radius: 10px;
+            margin-top: 12px;
         }
         
-        /* Large phones / small tablets (429px - 768px) */
-        @media (min-width: 429px) and (max-width: 768px) {
-            body { padding: 20px; }
-            .container { max-width: 500px; }
-            .card { padding: 24px; border-radius: 14px; }
-            h1 { font-size: 26px; }
-            h2 { font-size: 17px; }
-        }
-        
-        /* Tablets (769px - 1024px) */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            body { padding: 30px; }
-            .container { max-width: 600px; }
-            .card { padding: 28px; border-radius: 16px; }
-            h1 { font-size: 28px; }
-            h2 { font-size: 18px; }
-        }
-        
-        /* Desktop (> 1024px) */
-        @media (min-width: 1025px) {
-            body { padding: 40px 20px; }
-            .container { max-width: 700px; }
-            .card { padding: 32px; border-radius: 18px; margin-bottom: 20px; }
-            h1 { font-size: 32px; margin-bottom: 24px; }
-            h2 { font-size: 19px; }
-            input, select { padding: 13px 16px; }
-            .btn { padding: 16px; font-size: 18px; }
-            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,87,199,0.3); }
-        }
-        
-        /* Landscape mode adjustments */
-        @media (max-height: 600px) and (orientation: landscape) {
-            body { padding: 10px; }
-            .card { margin-bottom: 8px; padding: 14px; }
-            h1 { font-size: 18px; margin-bottom: 12px; }
+        /* Desktop adjustments */
+        @media (min-width: 768px) {
+            .container { max-width: 600px; margin: 0 auto; }
+            .card { border-radius: 16px; margin: 20px; border-bottom: none; }
         }
     </style>
 </head>
@@ -523,7 +631,7 @@ HTML_TEMPLATE = '''
         if (!id) return;
 
         addedDates = [];
-        document.getElementById('logCard').style.display = 'none';
+        document.getElementById('logCard').classList.remove('show');
         document.getElementById('addedLog').innerHTML = '';
 
         showStatus('Loading current availability...', 'info');
@@ -543,29 +651,25 @@ HTML_TEMPLATE = '''
             const noTimesMsg   = document.getElementById('noTimesMsg');
 
             if (bookingType === 'DATE_AND_TIME') {
-                timeGroup.style.display = 'block';
+                timeGroup.classList.add('show');
                 if (data.startTimes && data.startTimes.length > 0) {
                     noTimesMsg.style.display = 'none';
+                    timesList.style.display = 'flex';
                     timesList.innerHTML = data.startTimes.map(st =>
-                        `<label onclick="toggleCheckbox('time-${st.id}')">
+                        `<div class="time-option">
                             <input type="checkbox" id="time-${st.id}" value="${st.id}">
-                            <span>${st.label}</span>
-                        </label>`
+                            <label for="time-${st.id}" class="time-label">
+                                <div class="custom-checkbox"></div>
+                                <span class="time-text">${st.label}</span>
+                            </label>
+                        </div>`
                     ).join('');
-                    
-                    // Add change event listeners for visual feedback
-                    document.querySelectorAll('#startTimesList input[type=checkbox]').forEach(cb => {
-                        cb.addEventListener('change', function() {
-                            this.parentElement.style.background = this.checked ? '#e8f0fe' : '#f8f9fa';
-                            this.parentElement.style.borderColor = this.checked ? '#1d57c7' : '#e2e8f0';
-                        });
-                    });
                 } else {
                     timesList.innerHTML = '';
                     noTimesMsg.style.display = 'block';
                 }
             } else {
-                timeGroup.style.display = 'none';
+                timeGroup.classList.remove('show');
                 timesList.innerHTML = '';
             }
 
@@ -627,7 +731,7 @@ HTML_TEMPLATE = '''
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
             showStatus(`✅ ${date}${timeLabel} added!`, 'success');
             addedDates.push({ date, timeLabel, capacity });
-            document.getElementById('logCard').style.display = 'block';
+            document.getElementById('logCard').classList.add('show');
             document.getElementById('addedLog').innerHTML = addedDates.map(d =>
                 `<div class="rule-item">📅 <strong>${d.date}</strong>${d.timeLabel} &nbsp;|&nbsp; Capacity: <strong>${d.capacity}</strong></div>`
             ).join('');
@@ -658,14 +762,6 @@ HTML_TEMPLATE = '''
         icon.textContent = isHidden ? '▲' : '▼';
     }
 
-    function toggleCheckbox(id) {
-        const checkbox = document.getElementById(id);
-        if (checkbox) {
-            checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
-        }
-    }
-
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
     loadExperiences();
 </script>
@@ -683,3 +779,4 @@ if __name__ == '__main__':
     print("="*60 + "\n")
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
