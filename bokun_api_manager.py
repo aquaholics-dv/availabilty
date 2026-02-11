@@ -267,19 +267,25 @@ HTML_TEMPLATE = '''
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
             min-height: 100vh;
-            padding: 16px 12px;
+            padding: 12px;
             margin: 0;
         }
-        .container { max-width: 600px; margin: 0 auto; }
+        .container { max-width: 100%; margin: 0 auto; }
         .card {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
         }
-        h1 { color: white; font-size: 24px; margin: 0 0 4px 0; line-height: 1.3; }
-        h2 { font-size: 16px; color: #1d57c7; margin: 0 0 14px 0; }
+        h1 {
+            color: white;
+            font-size: 20px;
+            margin: 0 0 20px 0;
+            line-height: 1.3;
+            text-align: center;
+        }
+        h2 { font-size: 15px; color: #1d57c7; margin: 0 0 12px 0; font-weight: 700; }
         .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
         input, select {
@@ -353,11 +359,11 @@ HTML_TEMPLATE = '''
         }
         .toggle-bar span:first-child { font-weight: 600; color: #1d57c7; font-size: 14px; }
         .toggle-icon { color: #1d57c7; font-size: 14px; transition: transform 0.2s; }
-        /* Bigger touch targets for checkboxes */
+        /* Touch targets for checkboxes */
         #startTimesList label {
-            padding: 12px 14px;
-            margin: 6px 0;
-            border-radius: 10px;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
             background: #f8f9fa;
             border: 2px solid #e2e8f0;
             display: flex;
@@ -366,16 +372,72 @@ HTML_TEMPLATE = '''
             cursor: pointer;
             font-size: 16px;
             -webkit-tap-highlight-color: transparent;
+            transition: all 0.15s;
         }
+        #startTimesList label:active { background: #e8f0fe; border-color: #1d57c7; }
         #startTimesList input[type=checkbox] {
-            width: 22px;
-            height: 22px;
-            min-width: 22px;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
             cursor: pointer;
             accent-color: #1d57c7;
         }
-        /* Log card */
+        #startTimesList span { font-weight: 700; color: #1d57c7; font-size: 18px; }
         #addedLog .rule-item { font-size: 14px; padding: 12px 14px; }
+        
+        /* Small phones (< 375px) */
+        @media (max-width: 374px) {
+            body { padding: 8px; }
+            .card { padding: 14px; border-radius: 10px; margin-bottom: 10px; }
+            h1 { font-size: 18px; margin-bottom: 16px; }
+            h2 { font-size: 14px; }
+            input, select { padding: 12px; font-size: 16px; }
+            .btn { padding: 14px; font-size: 16px; }
+            #startTimesList label { padding: 12px; }
+            #startTimesList span { font-size: 16px; }
+        }
+        
+        /* Standard phones (375px - 428px) */
+        @media (min-width: 375px) and (max-width: 428px) {
+            .container { padding: 0; }
+        }
+        
+        /* Large phones / small tablets (429px - 768px) */
+        @media (min-width: 429px) and (max-width: 768px) {
+            body { padding: 20px; }
+            .container { max-width: 500px; }
+            .card { padding: 24px; border-radius: 14px; }
+            h1 { font-size: 26px; }
+            h2 { font-size: 17px; }
+        }
+        
+        /* Tablets (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            body { padding: 30px; }
+            .container { max-width: 600px; }
+            .card { padding: 28px; border-radius: 16px; }
+            h1 { font-size: 28px; }
+            h2 { font-size: 18px; }
+        }
+        
+        /* Desktop (> 1024px) */
+        @media (min-width: 1025px) {
+            body { padding: 40px 20px; }
+            .container { max-width: 700px; }
+            .card { padding: 32px; border-radius: 18px; margin-bottom: 20px; }
+            h1 { font-size: 32px; margin-bottom: 24px; }
+            h2 { font-size: 19px; }
+            input, select { padding: 13px 16px; }
+            .btn { padding: 16px; font-size: 18px; }
+            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29,87,199,0.3); }
+        }
+        
+        /* Landscape mode adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body { padding: 10px; }
+            .card { margin-bottom: 8px; padding: 14px; }
+            h1 { font-size: 18px; margin-bottom: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -477,10 +539,9 @@ HTML_TEMPLATE = '''
                 if (data.startTimes && data.startTimes.length > 0) {
                     noTimesMsg.style.display = 'none';
                     timesList.innerHTML = data.startTimes.map(st =>
-                        `<label style="display:flex;align-items:center;gap:10px;padding:8px 12px;margin:4px 0;
-                            background:#f8f9fa;border-radius:8px;cursor:pointer;font-size:15px;border:1px solid #e2e8f0">
-                            <input type="checkbox" value="${st.id}" style="width:17px;height:17px;cursor:pointer">
-                            <span style="font-weight:700;color:#1d57c7;font-size:16px">${st.label}</span>
+                        `<label for="time-${st.id}">
+                            <input type="checkbox" id="time-${st.id}" value="${st.id}">
+                            <span>${st.label}</span>
                         </label>`
                     ).join('');
                 } else {
