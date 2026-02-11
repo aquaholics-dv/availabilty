@@ -381,25 +381,33 @@ HTML_TEMPLATE = '''
             min-width: 24px;
             cursor: pointer;
             accent-color: #1d57c7;
+            -webkit-appearance: checkbox;
+            appearance: checkbox;
+            position: relative;
+            margin: 0;
         }
         #startTimesList span { font-weight: 700; color: #1d57c7; font-size: 18px; }
         #addedLog .rule-item { font-size: 14px; padding: 12px 14px; }
         
-        /* Small phones (< 375px) */
-        @media (max-width: 374px) {
+        /* All mobile devices */
+        @media (max-width: 428px) {
             body { padding: 8px; }
-            .card { padding: 14px; border-radius: 10px; margin-bottom: 10px; }
-            h1 { font-size: 18px; margin-bottom: 16px; }
-            h2 { font-size: 14px; }
-            input, select { padding: 12px; font-size: 16px; }
-            .btn { padding: 14px; font-size: 16px; }
-            #startTimesList label { padding: 12px; }
-            #startTimesList span { font-size: 16px; }
+            .card { padding: 16px; border-radius: 12px; margin-bottom: 10px; }
+            h1 { font-size: 22px; margin-bottom: 16px; }
+            h2 { font-size: 15px; margin-bottom: 10px; }
+            input, select { padding: 14px; font-size: 16px; border-radius: 12px; }
+            .btn { padding: 16px; font-size: 17px; border-radius: 12px; }
+            #startTimesList label { padding: 16px; margin: 6px 0; }
+            #startTimesList span { font-size: 17px; }
+            .toggle-bar { padding: 14px; }
+            .rule-item { padding: 12px; font-size: 14px; }
         }
         
-        /* Standard phones (375px - 428px) */
-        @media (min-width: 375px) and (max-width: 428px) {
-            .container { padding: 0; }
+        /* Extra small phones */
+        @media (max-width: 374px) {
+            body { padding: 6px; }
+            .card { padding: 14px; }
+            h1 { font-size: 20px; }
         }
         
         /* Large phones / small tablets (429px - 768px) */
@@ -539,11 +547,19 @@ HTML_TEMPLATE = '''
                 if (data.startTimes && data.startTimes.length > 0) {
                     noTimesMsg.style.display = 'none';
                     timesList.innerHTML = data.startTimes.map(st =>
-                        `<label for="time-${st.id}">
+                        `<label onclick="toggleCheckbox('time-${st.id}')">
                             <input type="checkbox" id="time-${st.id}" value="${st.id}">
                             <span>${st.label}</span>
                         </label>`
                     ).join('');
+                    
+                    // Add change event listeners for visual feedback
+                    document.querySelectorAll('#startTimesList input[type=checkbox]').forEach(cb => {
+                        cb.addEventListener('change', function() {
+                            this.parentElement.style.background = this.checked ? '#e8f0fe' : '#f8f9fa';
+                            this.parentElement.style.borderColor = this.checked ? '#1d57c7' : '#e2e8f0';
+                        });
+                    });
                 } else {
                     timesList.innerHTML = '';
                     noTimesMsg.style.display = 'block';
@@ -640,6 +656,14 @@ HTML_TEMPLATE = '''
         const isHidden = list.style.display === 'none';
         list.style.display = isHidden ? 'block' : 'none';
         icon.textContent = isHidden ? '▲' : '▼';
+    }
+
+    function toggleCheckbox(id) {
+        const checkbox = document.getElementById(id);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change'));
+        }
     }
 
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
