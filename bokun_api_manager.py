@@ -13,6 +13,7 @@ import hmac
 import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -185,7 +186,7 @@ def add_availability_rule():
 
         existing = get_resp.json()
         existing_rules = existing.get('availabilityRules', [])
-        booking_type   = existing.get('bookingType', 'DATE_ONLY')
+        api_booking_type = existing.get('bookingType', 'DATE_ONLY')
         print(f'Existing rules from API: {existing_rules}')
 
         # Step 2: Build the new rule
@@ -208,7 +209,7 @@ def add_availability_rule():
         }
 
         # Handle start times for DATE_AND_TIME products
-        if booking_type == 'DATE_AND_TIME':
+        if api_booking_type == 'DATE_AND_TIME':
             if start_time_ids and len(start_time_ids) > 0:
                 # User selected specific times
                 new_rule['allStartTimes'] = False
@@ -219,16 +220,19 @@ def add_availability_rule():
                 new_rule['allStartTimes'] = True
                 print('Adding all start times')
 
-        # Step 3: Clean existing rules before sending back - CREATE NEW OBJECTS
+        # Step 3: Clean existing rules before sending back - DEEP COPY via JSON
         clean_existing = []
         for rule in existing_rules:
+            # Deep copy via JSON to ensure no references remain
+            rule_copy = json.loads(json.dumps(rule))
+            
             # Create a completely new rule object to avoid reference issues
             cleaned_rule = {
-                'recurrenceRule': rule['recurrenceRule'],
-                'maxCapacity': rule['maxCapacity'],
-                'maxCapacityForPickup': rule.get('maxCapacityForPickup', rule.get('maxCapacity', 12)),
-                'minTotalPax': rule.get('minTotalPax', 1),
-                'guidedLanguages': rule.get('guidedLanguages', []),
+                'recurrenceRule': rule_copy['recurrenceRule'],
+                'maxCapacity': rule_copy['maxCapacity'],
+                'maxCapacityForPickup': rule_copy.get('maxCapacityForPickup', rule_copy.get('maxCapacity', 12)),
+                'minTotalPax': rule_copy.get('minTotalPax', 1),
+                'guidedLanguages': rule_copy.get('guidedLanguages', []),
             }
             
             # Ensure maxCapacityForPickup is >= 1
@@ -236,15 +240,15 @@ def add_availability_rule():
                 cleaned_rule['maxCapacityForPickup'] = cleaned_rule['maxCapacity']
             
             # Copy id if exists (for existing rules)
-            if 'id' in rule:
-                cleaned_rule['id'] = rule['id']
+            if 'id' in rule_copy:
+                cleaned_rule['id'] = rule_copy['id']
             
             # For DATE_AND_TIME experiences, handle start times
-            if booking_type == 'DATE_AND_TIME':
-                if rule.get('startTimes') and isinstance(rule['startTimes'], list) and len(rule['startTimes']) > 0:
+            if api_booking_type == 'DATE_AND_TIME':
+                if rule_copy.get('startTimes') and isinstance(rule_copy['startTimes'], list) and len(rule_copy['startTimes']) > 0:
                     # Extract ONLY the id from each start time
                     cleaned_times = []
-                    for st in rule['startTimes']:
+                    for st in rule_copy['startTimes']:
                         if isinstance(st, dict) and 'id' in st and st['id']:
                             cleaned_times.append({'id': st['id']})  # NEW dict with ONLY id
                     
