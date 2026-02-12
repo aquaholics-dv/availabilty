@@ -228,18 +228,34 @@ def add_availability_rule():
             
             # For DATE_AND_TIME experiences, ALWAYS ensure allStartTimes is present
             if booking_type == 'DATE_AND_TIME':
-                # Clean startTimes first - remove externalId to avoid id/externalId conflict
-                if rule.get('startTimes'):
-                    rule['startTimes'] = [{'id': st['id']} for st in rule['startTimes'] if st.get('id')]
-                    # Has specific times, so allStartTimes should be False
-                    rule['allStartTimes'] = False
+                # Clean startTimes - ONLY keep id field, remove everything else (externalId, hour, minute, etc)
+                if rule.get('startTimes') and isinstance(rule['startTimes'], list) and len(rule['startTimes']) > 0:
+                    cleaned_times = []
+                    for st in rule['startTimes']:
+                        if isinstance(st, dict) and 'id' in st and st['id']:
+                            cleaned_times.append({'id': st['id']})
+                    
+                    if cleaned_times:
+                        rule['startTimes'] = cleaned_times
+                        rule['allStartTimes'] = False
+                    else:
+                        # startTimes was empty or invalid, remove it
+                        rule.pop('startTimes', None)
+                        rule['allStartTimes'] = True
                 else:
-                    # No specific times, so allStartTimes should be True
+                    # No startTimes, remove field if present
+                    rule.pop('startTimes', None)
                     rule['allStartTimes'] = True
             
             clean_existing.append(rule)
 
         updated_rules = clean_existing + [new_rule]
+
+        # DEBUG: Print what we're sending
+        print(f'=== NEW RULE BEING ADDED ===')
+        print(f'allStartTimes: {new_rule.get("allStartTimes")}')
+        print(f'startTimes: {new_rule.get("startTimes")}')
+        print(f'===========================')
 
         put_payload = {
             'availabilityRules': updated_rules
