@@ -219,35 +219,44 @@ def add_availability_rule():
                 new_rule['allStartTimes'] = True
                 print('Adding all start times')
 
-        # Step 3: Clean existing rules before sending back
+        # Step 3: Clean existing rules before sending back - CREATE NEW OBJECTS
         clean_existing = []
         for rule in existing_rules:
-            # Fix maxCapacityForPickup - must be >= 1
-            if not rule.get('maxCapacityForPickup') or rule['maxCapacityForPickup'] < 1:
-                rule['maxCapacityForPickup'] = rule.get('maxCapacity', 12)
+            # Create a completely new rule object to avoid reference issues
+            cleaned_rule = {
+                'recurrenceRule': rule['recurrenceRule'],
+                'maxCapacity': rule['maxCapacity'],
+                'maxCapacityForPickup': rule.get('maxCapacityForPickup', rule.get('maxCapacity', 12)),
+                'minTotalPax': rule.get('minTotalPax', 1),
+                'guidedLanguages': rule.get('guidedLanguages', []),
+            }
             
-            # For DATE_AND_TIME experiences, ALWAYS ensure allStartTimes is present
+            # Ensure maxCapacityForPickup is >= 1
+            if cleaned_rule['maxCapacityForPickup'] < 1:
+                cleaned_rule['maxCapacityForPickup'] = cleaned_rule['maxCapacity']
+            
+            # Copy id if exists (for existing rules)
+            if 'id' in rule:
+                cleaned_rule['id'] = rule['id']
+            
+            # For DATE_AND_TIME experiences, handle start times
             if booking_type == 'DATE_AND_TIME':
-                # Clean startTimes - ONLY keep id field, remove everything else (externalId, hour, minute, etc)
                 if rule.get('startTimes') and isinstance(rule['startTimes'], list) and len(rule['startTimes']) > 0:
+                    # Extract ONLY the id from each start time
                     cleaned_times = []
                     for st in rule['startTimes']:
                         if isinstance(st, dict) and 'id' in st and st['id']:
-                            cleaned_times.append({'id': st['id']})
+                            cleaned_times.append({'id': st['id']})  # NEW dict with ONLY id
                     
                     if cleaned_times:
-                        rule['startTimes'] = cleaned_times
-                        rule['allStartTimes'] = False
+                        cleaned_rule['startTimes'] = cleaned_times
+                        cleaned_rule['allStartTimes'] = False
                     else:
-                        # startTimes was empty or invalid, remove it
-                        rule.pop('startTimes', None)
-                        rule['allStartTimes'] = True
+                        cleaned_rule['allStartTimes'] = True
                 else:
-                    # No startTimes, remove field if present
-                    rule.pop('startTimes', None)
-                    rule['allStartTimes'] = True
+                    cleaned_rule['allStartTimes'] = True
             
-            clean_existing.append(rule)
+            clean_existing.append(cleaned_rule)
 
         updated_rules = clean_existing + [new_rule]
 
