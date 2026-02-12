@@ -556,6 +556,36 @@ HTML_TEMPLATE = '''
             font-size: 16px;
             transition: transform 0.2s;
         }
+        
+        /* Time groups */
+        .time-group {
+            margin-bottom: 12px;
+        }
+        .time-group-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .time-group-header span:first-child {
+            font-weight: 700;
+            color: white;
+            font-size: 15px;
+        }
+        .time-group-header .toggle-icon {
+            color: white;
+            font-size: 16px;
+        }
+        .time-group-content {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
         #rulesList {
             display: none;
             margin-top: 12px;
@@ -696,15 +726,60 @@ HTML_TEMPLATE = '''
                 timeGroup.style.display = 'block';
                 if (data.startTimes && data.startTimes.length > 0) {
                     noTimesMsg.style.display = 'none';
-                    timesList.innerHTML = data.startTimes.map(st =>
-                        `<div class="time-option">
-                            <input type="checkbox" id="time-${st.id}" value="${st.id}">
-                            <label for="time-${st.id}" class="time-label">
-                                <div class="custom-checkbox"></div>
-                                <span class="time-text">${st.label}</span>
-                            </label>
-                        </div>`
-                    ).join('');
+                    // Group times into Morning (before 11:30) and Afternoon (11:30+)
+                    const morningTimes = data.startTimes.filter(st => {
+                        const [hours, mins] = st.label.split(':').map(Number);
+                        const totalMins = hours * 60 + mins;
+                        return totalMins < 690; // 11:30 = 690 minutes
+                    });
+                    const afternoonTimes = data.startTimes.filter(st => {
+                        const [hours, mins] = st.label.split(':').map(Number);
+                        const totalMins = hours * 60 + mins;
+                        return totalMins >= 690;
+                    });
+                    
+                    let html = '';
+                    if (morningTimes.length > 0) {
+                        html += `<div class="time-group">
+                            <div class="time-group-header" onclick="toggleTimeGroup('morning')">
+                                <span>🌅 Morning (6:00am - 11:30am)</span>
+                                <span id="morning-icon" class="toggle-icon">▼</span>
+                            </div>
+                            <div id="morning-times" class="time-group-content" style="display:none">
+                                ${morningTimes.map(st => 
+                                    `<div class="time-option">
+                                        <input type="checkbox" id="time-${st.id}" value="${st.id}">
+                                        <label for="time-${st.id}" class="time-label">
+                                            <div class="custom-checkbox"></div>
+                                            <span class="time-text">${st.label}</span>
+                                        </label>
+                                    </div>`
+                                ).join('')}
+                            </div>
+                        </div>`;
+                    }
+                    
+                    if (afternoonTimes.length > 0) {
+                        html += `<div class="time-group">
+                            <div class="time-group-header" onclick="toggleTimeGroup('afternoon')">
+                                <span>☀️ Afternoon (11:30am onwards)</span>
+                                <span id="afternoon-icon" class="toggle-icon">▼</span>
+                            </div>
+                            <div id="afternoon-times" class="time-group-content" style="display:none">
+                                ${afternoonTimes.map(st => 
+                                    `<div class="time-option">
+                                        <input type="checkbox" id="time-${st.id}" value="${st.id}">
+                                        <label for="time-${st.id}" class="time-label">
+                                            <div class="custom-checkbox"></div>
+                                            <span class="time-text">${st.label}</span>
+                                        </label>
+                                    </div>`
+                                ).join('')}
+                            </div>
+                        </div>`;
+                    }
+                    
+                    timesList.innerHTML = html;
                 } else {
                     timesList.innerHTML = '';
                     noTimesMsg.style.display = 'block';
@@ -815,6 +890,16 @@ HTML_TEMPLATE = '''
         const isHidden = list.style.display === 'none';
         list.style.display = isHidden ? 'block' : 'none';
         icon.textContent = isHidden ? '▲' : '▼';
+    }
+
+    function toggleTimeGroup(group) {
+        const content = document.getElementById(group + '-times');
+        const icon = document.getElementById(group + '-icon');
+        if (content && icon) {
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'block' : 'none';
+            icon.textContent = isHidden ? '▲' : '▼';
+        }
     }
 
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
