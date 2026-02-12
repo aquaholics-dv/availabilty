@@ -186,8 +186,16 @@ def add_availability_rule():
 
         existing = get_resp.json()
         existing_rules = existing.get('availabilityRules', [])
-        api_booking_type = existing.get('bookingType', 'DATE_ONLY')
+        
+        # Fetch booking type separately - AVAILABILITY_RULES component doesn't include it
+        bt_resp = bokun_get(f'/restapi/v2.0/experience/{experience_id}/components?componentType=BOOKING_TYPE')
+        if bt_resp.status_code == 200:
+            api_booking_type = bt_resp.json().get('bookingType', 'DATE_ONLY')
+        else:
+            api_booking_type = 'DATE_ONLY'
+        
         print(f'Existing rules from API: {existing_rules}')
+        print(f'API Booking Type: {api_booking_type}')
 
         # Step 2: Build the new rule
         recurrence_rule = {
@@ -222,6 +230,7 @@ def add_availability_rule():
 
         # Step 3: Clean existing rules before sending back - DEEP COPY via JSON
         clean_existing = []
+        print(f'*** CLEANING {len(existing_rules)} RULES, api_booking_type={api_booking_type} ***')
         for rule in existing_rules:
             # Deep copy via JSON to ensure no references remain
             rule_copy = json.loads(json.dumps(rule))
