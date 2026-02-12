@@ -323,20 +323,25 @@ HTML_TEMPLATE = '''
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
             min-height: 100vh;
-            padding: 16px 12px;
+            padding: 20px 16px;
             margin: 0;
+            font-size: 18px;
         }
         
         /* Header removed - back to inline style */
         
-        .container { max-width: 100%; margin: 0 auto; padding: 0; }
+        .container { 
+            max-width: 100%; 
+            margin: 0 auto; 
+            padding: 12px;
+        }
         
         .card {
             background: white;
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 24px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         /* Step header */
@@ -346,8 +351,8 @@ HTML_TEMPLATE = '''
             margin-bottom: 20px;
         }
         .step-number {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: #1d57c7;
             color: white;
             border-radius: 50%;
@@ -355,8 +360,8 @@ HTML_TEMPLATE = '''
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 20px;
-            margin-right: 12px;
+            font-size: 22px;
+            margin-right: 14px;
             flex-shrink: 0;
         }
         h2 {
@@ -370,18 +375,18 @@ HTML_TEMPLATE = '''
         .form-group { margin-bottom: 20px; }
         label {
             display: block;
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 600;
             color: #444;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         select, input[type="date"], input[type="number"] {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 17px;
+            border-radius: 14px;
+            font-size: 18px;
             background: white;
             color: #2E3645;
             -webkit-appearance: none;
@@ -475,7 +480,7 @@ HTML_TEMPLATE = '''
         }
         
         .time-text {
-            font-size: 19px;
+            font-size: 21px;
             font-weight: 700;
             color: #1d57c7;
         }
@@ -576,7 +581,7 @@ HTML_TEMPLATE = '''
         .time-group-header span:first-child {
             font-weight: 700;
             color: white;
-            font-size: 15px;
+            font-size: 17px;
         }
         .time-group-header .toggle-icon {
             color: white;
@@ -855,7 +860,7 @@ HTML_TEMPLATE = '''
 
         if (data.success) {
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
-            showStatus(`🎉 Availability Added!\n${date}${timeLabel} • ${capacity} spaces`, 'success');
+            showStatus(`✅ Trip Added!\n${date}${timeLabel} • ${capacity} spaces`, 'success');
             
             // Auto-hide success message after 4 seconds
             setTimeout(() => hideStatus(), 4000);
