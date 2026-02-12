@@ -260,11 +260,16 @@ def add_availability_rule():
 
         updated_rules = clean_existing + [new_rule]
 
-        # DEBUG: Print what we're sending
-        print(f'=== NEW RULE BEING ADDED ===')
-        print(f'allStartTimes: {new_rule.get("allStartTimes")}')
-        print(f'startTimes: {new_rule.get("startTimes")}')
-        print(f'===========================')
+        # DEBUG: Print ALL rules being sent
+        print(f'\n=== SENDING {len(updated_rules)} RULES TO BOKUN ===')
+        for i, r in enumerate(updated_rules):
+            print(f'Rule {i}:')
+            print(f'  allStartTimes: {r.get("allStartTimes")}')
+            print(f'  startTimes: {r.get("startTimes")}')
+            if r.get("startTimes"):
+                for j, st in enumerate(r["startTimes"]):
+                    print(f'    startTime[{j}]: {st}')
+        print(f'================================\n')
 
         put_payload = {
             'availabilityRules': updated_rules
