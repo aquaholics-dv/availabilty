@@ -346,8 +346,9 @@ HTML_TEMPLATE = '''
         
         .container { 
             max-width: 100%; 
-            margin: 0 auto; 
+            margin: 0;
             padding: 0;
+            width: 100%;
         }
         
         .card {
@@ -533,12 +534,28 @@ HTML_TEMPLATE = '''
         }
         .status.show { display: block; }
         .status.success {
-            background: #d1fae5;
-            border-left: 6px solid #10b981;
-            color: #065f46;
-            font-size: 16px;
-            font-weight: 600;
+            background: #10b981;
+            border: none;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
             white-space: pre-line;
+            text-align: center;
+            padding: 24px 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
         .status.error {
             background: #fee2e2;
@@ -879,7 +896,7 @@ HTML_TEMPLATE = '''
             showStatus(` Trip Added!\n${date}${timeLabel}  ${capacity} spaces`, 'success');
             
             // Auto-hide success message after 4 seconds
-            setTimeout(() => hideStatus(), 4000);
+            setTimeout(() => hideStatus(), 5000);
             
             addedDates.push({ date, timeLabel, capacity });
             document.getElementById('logCard').style.display = 'block';
