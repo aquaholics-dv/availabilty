@@ -1,3 +1,18 @@
+# AQUAHOLICS BOAT BOOKING - NEW VERSION
+# File updated: 2026-02-13
+# If you see yellow background with red text, this is loaded correctly
+# 
+#!/usr/bin/env python3
+# ================================================================
+# AQUAHOLICS BOAT BOOKING APP - VERSION 2.0 - UPDATED VERSION
+# THIS IS THE NEW VERSION WITH LARGER FONTS AND WHITE HEADER
+# FILE SIZE SHOULD BE DIFFERENT FROM 34,571 BYTES
+# IF YOU SEE THIS COMMENT, YOU HAVE THE RIGHT FILE!
+# ================================================================
+# This file was generated on February 13, 2026
+# It includes mobile-optimized styling with larger fonts
+# ================================================================
+
 """
 Aquaholics Boat Booking App
 Uses the correct REST v2 /experience/{id}/components endpoint
@@ -321,11 +336,10 @@ HTML_TEMPLATE = '''
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
+            background: #f8f9fa;
             min-height: 100vh;
-            padding: 20px 16px;
+            padding: 0;
             margin: 0;
-            font-size: 18px;
         }
         
         /* Header removed - back to inline style */
@@ -634,8 +648,10 @@ HTML_TEMPLATE = '''
     </style>
 </head>
 <body>
+<div style="background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%); padding: 28px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
+    <h1 style="color: white; font-size: 32px; margin: 0; font-weight: 700;">🌊 Aquaholics Boat Booking</h1>
+</div>
 <div class="container">
-    <h1>🌊 Aquaholics Boat Booking App</h1>
 
     <!-- Experience Selector -->
     <div class="card">
@@ -648,8 +664,8 @@ HTML_TEMPLATE = '''
         </div>
         <div id="rulesSection" style="display:none">
             <div class="toggle-bar" onclick="toggleRules()">
-                <span>📋 Current Availability</span>
-                <span id="rulesToggleIcon" class="toggle-icon">▼</span>
+                <span> Current Availability</span>
+                <span id="rulesToggleIcon" class="toggle-icon"></span>
             </div>
             <div id="rulesList" class="rules-list" style="display:none;margin-top:4px"></div>
         </div>
@@ -666,20 +682,20 @@ HTML_TEMPLATE = '''
             <label>Start Times</label>
             <div id="startTimesList"></div>
             <div id="noTimesMsg" style="display:none;color:#e67e22;font-size:13px;padding:8px;background:#fef9e7;border-radius:6px;margin-top:8px">
-                ⚠️ No start times configured on this experience in Bokun yet.
+                 No start times configured on this experience in Bokun yet.
             </div>
         </div>
         <div class="form-group">
             <label>Capacity</label>
             <input type="number" id="capacity" value="12" min="1">
         </div>
-        <button class="btn btn-primary" onclick="addRule()">➕ Add This Date</button>
+        <button class="btn btn-primary" onclick="addRule()"> Add This Date</button>
         <div id="status" class="status"></div>
     </div>
 
     <!-- Added Dates Log -->
     <div class="card" id="logCard" style="display:none">
-        <h2>✅ Dates Added This Session</h2>
+        <h2> Dates Added This Session</h2>
         <div id="addedLog"></div>
     </div>
 </div>
@@ -747,8 +763,8 @@ HTML_TEMPLATE = '''
                     if (morningTimes.length > 0) {
                         html += `<div class="time-group">
                             <div class="time-group-header" onclick="toggleTimeGroup('morning')">
-                                <span>🌅 Morning (6:00am - 11:30am)</span>
-                                <span id="morning-icon" class="toggle-icon">▼</span>
+                                <span> Morning (6:00am - 11:30am)</span>
+                                <span id="morning-icon" class="toggle-icon"></span>
                             </div>
                             <div id="morning-times" class="time-group-content" style="display:none">
                                 ${morningTimes.map(st => 
@@ -767,8 +783,8 @@ HTML_TEMPLATE = '''
                     if (afternoonTimes.length > 0) {
                         html += `<div class="time-group">
                             <div class="time-group-header" onclick="toggleTimeGroup('afternoon')">
-                                <span>☀️ Afternoon (11:30am onwards)</span>
-                                <span id="afternoon-icon" class="toggle-icon">▼</span>
+                                <span> Afternoon (11:30am onwards)</span>
+                                <span id="afternoon-icon" class="toggle-icon"></span>
                             </div>
                             <div id="afternoon-times" class="time-group-content" style="display:none">
                                 ${afternoonTimes.map(st => 
@@ -801,7 +817,7 @@ HTML_TEMPLATE = '''
                 list.innerHTML = data.rules.map(r => {
                     const start = r.recurrenceRule?.startDate || '?';
                     const end   = r.recurrenceRule?.endDate   || '?';
-                    const label = start === end ? `📅 ${start}` : `📅 ${start} → ${end}`;
+                    const label = start === end ? ` ${start}` : ` ${start}  ${end}`;
                     return `<div class="rule-item">
                         ${label} &nbsp;|&nbsp; Capacity: <strong>${r.maxCapacity}</strong>
                         ${r.recurrenceRule?.byWeekday?.length ? `&nbsp;|&nbsp; ${r.recurrenceRule.byWeekday.join(', ')}` : ''}
@@ -860,7 +876,7 @@ HTML_TEMPLATE = '''
 
         if (data.success) {
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
-            showStatus(`✅ Trip Added!\n${date}${timeLabel} • ${capacity} spaces`, 'success');
+            showStatus(` Trip Added!\n${date}${timeLabel}  ${capacity} spaces`, 'success');
             
             // Auto-hide success message after 4 seconds
             setTimeout(() => hideStatus(), 4000);
@@ -868,7 +884,7 @@ HTML_TEMPLATE = '''
             addedDates.push({ date, timeLabel, capacity });
             document.getElementById('logCard').style.display = 'block';
             document.getElementById('addedLog').innerHTML = addedDates.map(d =>
-                `<div class="rule-item">📅 <strong>${d.date}</strong>${d.timeLabel} &nbsp;|&nbsp; Capacity: <strong>${d.capacity}</strong></div>`
+                `<div class="rule-item"> <strong>${d.date}</strong>${d.timeLabel} &nbsp;|&nbsp; Capacity: <strong>${d.capacity}</strong></div>`
             ).join('');
             // Jump to next day
             const next = new Date(date);
@@ -876,7 +892,7 @@ HTML_TEMPLATE = '''
             document.getElementById('date').value = next.toISOString().split('T')[0];
             loadRules();
         } else {
-            showStatus('❌ ' + data.error, 'error');
+            showStatus(' ' + data.error, 'error');
         }
     }
 
@@ -894,7 +910,7 @@ HTML_TEMPLATE = '''
         const icon = document.getElementById('rulesToggleIcon');
         const isHidden = list.style.display === 'none';
         list.style.display = isHidden ? 'block' : 'none';
-        icon.textContent = isHidden ? '▲' : '▼';
+        icon.textContent = isHidden ? '' : '';
     }
 
     function toggleTimeGroup(group) {
@@ -903,7 +919,7 @@ HTML_TEMPLATE = '''
         if (content && icon) {
             const isHidden = content.style.display === 'none';
             content.style.display = isHidden ? 'block' : 'none';
-            icon.textContent = isHidden ? '▲' : '▼';
+            icon.textContent = isHidden ? '' : '';
         }
     }
 
@@ -916,10 +932,10 @@ HTML_TEMPLATE = '''
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("🌊 BOKUN AVAILABILITY MANAGER - API VERSION")
+    print(" BOKUN AVAILABILITY MANAGER - API VERSION")
     print("="*60)
-    print("\n✅ Uses Bokun REST v2 API - no browser automation needed!")
-    print("\n👉 Open your browser and go to:")
+    print("\n Uses Bokun REST v2 API - no browser automation needed!")
+    print("\n Open your browser and go to:")
     print("\n   http://localhost:5000\n")
     print("="*60 + "\n")
     port = int(os.environ.get('PORT', 5000))
