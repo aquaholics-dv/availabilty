@@ -333,15 +333,15 @@ HTML_TEMPLATE = '''
         .container { 
             max-width: 100%; 
             margin: 0 auto; 
-            padding: 12px;
+            padding: 0;
         }
         
         .card {
             background: white;
-            border-radius: 16px;
+            border-radius: 0;
             padding: 24px 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+            border-bottom: 8px solid #f8f9fa;
         }
         
         /* Step header */
