@@ -1,3 +1,4 @@
+
 # AQUAHOLICS BOAT BOOKING - NEW VERSION
 # File updated: 2026-02-13
 # If you see yellow background with red text, this is loaded correctly
@@ -34,6 +35,15 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+
 
 BOKUN_ACCESS_KEY = os.getenv('BOKUN_ACCESS_KEY', 'b048bb24bc604475aaa503ac29f9caae')
 BOKUN_SECRET_KEY = os.getenv('BOKUN_SECRET_KEY', '0bd28b4cff1340749168428d675f6b2a')
@@ -328,7 +338,7 @@ HTML_TEMPLATE = '''
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Aquaholics Boat Booking App</title>
+    <title>Aquaholics Boat Booking App v3</title>
     <style>
         * { 
             box-sizing: border-box;
