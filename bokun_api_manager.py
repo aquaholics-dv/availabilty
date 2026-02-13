@@ -893,7 +893,7 @@ HTML_TEMPLATE = '''
 
         if (data.success) {
             const timeLabel = selectedLabels.length ? ` at ${selectedLabels.join(', ')}` : '';
-            showStatus(` Trip Added!\n${date}${timeLabel}  ${capacity} spaces`, 'success');
+            showStatus(`✅ TRIP ADDED!\n📅 ${date}${timeLabel}\n👥 ${capacity} spaces`, 'success');
             
             // Auto-hide success message after 4 seconds
             setTimeout(() => hideStatus(), 5000);
