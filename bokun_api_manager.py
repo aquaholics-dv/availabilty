@@ -626,6 +626,37 @@ HTML_TEMPLATE = '''
             margin-top: 12px;
         }
         
+        /* Force mobile zoom */
+        @media (max-width: 767px) {
+            html {
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+            }
+            body {
+                font-size: 18px;
+            }
+            h2 {
+                font-size: 21px;
+            }
+            label {
+                font-size: 18px;
+            }
+            select, input[type="date"], input[type="number"] {
+                font-size: 20px;
+                padding: 20px 18px;
+            }
+            .btn {
+                font-size: 20px;
+                padding: 22px;
+            }
+            .time-text {
+                font-size: 22px;
+            }
+            .time-group-header span:first-child {
+                font-size: 18px;
+            }
+        }
+        
         /* Desktop adjustments */
         @media (min-width: 768px) {
             .container { max-width: 600px; margin: 0 auto; }
