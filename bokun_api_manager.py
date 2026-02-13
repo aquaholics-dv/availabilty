@@ -431,11 +431,11 @@ HTML_TEMPLATE = '''
         .time-label {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 18px;
+            gap: 16px;
+            padding: 22px;
             background: #f8f9fa;
             border: 3px solid #e2e8f0;
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.2s;
             user-select: none;
@@ -456,11 +456,11 @@ HTML_TEMPLATE = '''
         }
         
         .custom-checkbox {
-            width: 28px;
-            height: 28px;
-            min-width: 28px;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
             border: 3px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 10px;
             background: white;
             position: relative;
             transition: all 0.2s;
@@ -571,7 +571,7 @@ HTML_TEMPLATE = '''
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 16px;
+            padding: 20px;
             background: linear-gradient(135deg, #1d57c7 0%, #0a2d6e 100%);
             border-radius: 12px;
             margin-bottom: 8px;
@@ -581,7 +581,7 @@ HTML_TEMPLATE = '''
         .time-group-header span:first-child {
             font-weight: 700;
             color: white;
-            font-size: 17px;
+            font-size: 20px;
         }
         .time-group-header .toggle-icon {
             color: white;
@@ -626,38 +626,7 @@ HTML_TEMPLATE = '''
             margin-top: 12px;
         }
         
-        /* Force mobile zoom */
-        @media (max-width: 767px) {
-            html {
-                -webkit-text-size-adjust: 100%;
-                text-size-adjust: 100%;
-            }
-            body {
-                font-size: 18px;
-            }
-            h2 {
-                font-size: 21px;
-            }
-            label {
-                font-size: 18px;
-            }
-            select, input[type="date"], input[type="number"] {
-                font-size: 20px;
-                padding: 20px 18px;
-            }
-            .btn {
-                font-size: 20px;
-                padding: 22px;
-            }
-            .time-text {
-                font-size: 22px;
-            }
-            .time-group-header span:first-child {
-                font-size: 18px;
-            }
-        }
-        
-        /* Desktop adjustments */
+/* Desktop adjustments */
         @media (min-width: 768px) {
             .container { max-width: 600px; margin: 0 auto; }
             .card { border-radius: 16px; margin: 20px; border-bottom: none; }
